@@ -3,7 +3,6 @@ var circle1 = document.getElementById('circle1');
 
 
 (function () {
-  var count = 0;
   var numSteps = 80;
   var r = 200;
   var c1x = 0; var c2x = 500;
@@ -14,37 +13,48 @@ var circle1 = document.getElementById('circle1');
   var circle2 = circle1.cloneNode();
   circle2.setAttribute('id', '');
   circle2.setAttribute('cx', c2x);
-  circle2.setAttribute('cy', c1x);
+  circle2.setAttribute('cy', c2y);
   orbits.appendChild(circle2);  
 
-  function* diagonal(cPosition) {
+  function* diagonal(cPosition, direction, stepSize) {
     cPosition = yield cPosition;
+    var step = direction * stepSize;
     while (1) {
       var next = {
-        x: cPosition.value.x + 3,
-        y: cPosition.value.y + 3
+        x: cPosition.value.x + step,
+        y: cPosition.value.y + step 
       };
       cPosition = yield next;
     }
   }
 
-  var kissIt = diagonal({x: c1x, y: c1y})
-  var last = kissIt.next(); 
-  var val;
-  var roll = setInterval(function () {
-    last = kissIt.next(last);
-    val = last.value;
 
-    c1x = val.x;
-    c1y = val.y;
+  var moveCircle = function (circle, direction, fps) {
+    var val;
+    var cx = parseInt(circle.getAttribute('cx'));
+    var cy = parseInt(circle.getAttribute('cy'));
+    var kissIt = diagonal({x: cx, y: cy}, direction, 3)
+    var last = kissIt.next(); 
+    var count = 0;
+    var roll = function () {
+      last = kissIt.next(last);
+      val = last.value;
 
-    circle1.setAttribute('cx', c1x);
-    circle1.setAttribute('cy', c1y);
+      cx = val.x;
+      cy = val.y;
+      this.setAttribute('cx', cx);
+      this.setAttribute('cy', cy);
 
-    count += 1;
-    if (count > numSteps) {
-      clearInterval(roll);
+      count += 1;
+      if (count > numSteps) {
+        clearInterval(rollInterval);
+      }
     }
-  }, fps);
+    var rollInterval = setInterval(roll.bind(circle), fps);
+  }
+
+  moveCircle(circle1, 1, fps);
+  moveCircle(circle2, -1, fps);
+
 }());
 
