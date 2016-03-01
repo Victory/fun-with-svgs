@@ -53,14 +53,41 @@ var circle1 = document.getElementById('circle1');
     var rollInterval = setInterval(roll.bind(circle), fps);
   }
 
+  var orbitCircle = function (circle, radius, fps) {
+    var rads = 0;
+    var cx;
+    var cy;
+    var sun = {
+      x: parseInt(circle.getAttribute('cx')), 
+      y: parseInt(circle.getAttribute('cy'))
+    };
+    setInterval(function () {
+      rads += .1;
+      cx = radius * Math.sin(rads);
+      cy = radius * Math.cos(rads);
+      cx += sun.x;
+      cy += sun.y;
+      circle.setAttribute('cx', cx);
+      circle.setAttribute('cy', cy);
+      console.log(cx, cy);
+    }, 80);
+  }
+
   var circle2 = newCircle(circle1, 500, 500);
   var circle3 = newCircle(circle1, 500, 0);
   var circle4 = newCircle(circle1, 0, 500);
+  var circle5 = newCircle(circle1, 150, 150);
+  var circle6 = newCircle(circle1, 350, 150);
+  var circle7 = newCircle(circle1, 50, 50);
+
 
   moveCircle(circle1, 1, 1, fps);
   moveCircle(circle2, -1, -1, fps);
   moveCircle(circle3, -1, 1, fps);
   moveCircle(circle4, 1, -1, fps);
 
+  orbitCircle(circle5, 80, fps);
+  orbitCircle(circle6, 80, fps);
+  orbitCircle(circle7, 20, fps);
 }());
 
