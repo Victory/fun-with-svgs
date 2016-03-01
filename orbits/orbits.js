@@ -69,8 +69,7 @@ var circle1 = document.getElementById('circle1');
       cy += sun.y;
       circle.setAttribute('cx', cx);
       circle.setAttribute('cy', cy);
-      console.log(cx, cy);
-    }, 80);
+    }, fps);
   }
 
   var circle2 = newCircle(circle1, 500, 500);
