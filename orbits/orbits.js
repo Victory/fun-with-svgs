@@ -72,12 +72,33 @@ var circle1 = document.getElementById('circle1');
     }, fps);
   }
 
+  var oscillate = function (circle, start, end, fps) {
+    var rads = 0;
+    var step = 10;
+    var initCx = parseInt(circle.getAttribute('cx'));
+    var initCy = parseInt(circle.getAttribute('cy'));
+    setInterval(function () {
+      rads += .4;
+      cx = parseInt(circle.getAttribute('cx'));
+      cy = parseInt(circle.getAttribute('cy')) 
+      cx += step;
+      cy = cy + 30 * Math.sin(rads);
+
+      if (cx + step >= end || cx + step <= start) {
+        step *= -1;
+      }
+      circle.setAttribute('cx', cx);
+      circle.setAttribute('cy', cy);
+    }, 80);
+  }
+
   var circle2 = newCircle(circle1, 500, 500);
   var circle3 = newCircle(circle1, 500, 0);
   var circle4 = newCircle(circle1, 0, 500);
   var circle5 = newCircle(circle1, 150, 150);
   var circle6 = newCircle(circle1, 350, 150);
   var circle7 = newCircle(circle1, 50, 50);
+  var circle8 = newCircle(circle1, 0, 100);
 
 
   moveCircle(circle1, 1, 1, fps);
@@ -88,5 +109,6 @@ var circle1 = document.getElementById('circle1');
   orbitCircle(circle5, 80, fps);
   orbitCircle(circle6, 80, fps);
   orbitCircle(circle7, 20, fps);
+  oscillate(circle8, 0, 500);
 }());
 
