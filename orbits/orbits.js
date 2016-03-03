@@ -1,21 +1,31 @@
 var orbits = document.getElementById('orbits');
 var circle1 = document.getElementById('circle1');
 
+circle1.style.display = "none";
 
 (function () {
   var numSteps = 80;
   var r = 200;
   var fps = 1000/25;
-  function newCircle(circleToClone, cx, cy) {
+
+  function getCircleLocation (circle) {
+    return {
+      x: parseInt(circle.getAttribute('cx')),
+      y: parseInt(circle.getAttribute('cy'))
+    };
+  }
+
+  function newCircle (circleToClone, cx, cy) {
     var circle = circleToClone.cloneNode();
     circle.setAttribute('id', '');
     circle.setAttribute('cx', cx);
     circle.setAttribute('cy', cy);
+    circle.style.display = "block";
     orbits.appendChild(circle);
     return circle;
   }
 
-  function* diagonal(cPosition, xDirection, yDirection, stepSize) {
+  function* diagonal (cPosition, xDirection, yDirection, stepSize) {
     cPosition = yield cPosition;
     var xStep = xDirection * stepSize;
     var yStep = yDirection * stepSize;
@@ -92,6 +102,22 @@ var circle1 = document.getElementById('circle1');
     }, 80);
   }
 
+  var spiningOrbit = function (circle, radius, oscillation, fps) {
+    var orbitRads = 0;
+    var oscillatingRads = 0;
+    var c = getCircleLocation(circle);
+    setInterval(function () {
+      orbitRads += .1;
+      oscillatingRads += .5;
+      cx = radius * Math.sin(orbitRads);
+      cy = radius * Math.cos(orbitRads);
+      cx += c.x + oscillation * Math.sin(oscillatingRads);
+      cy += c.y + oscillation * Math.cos(oscillatingRads);
+      circle.setAttribute('cx', cx);
+      circle.setAttribute('cy', cy);
+    }, fps);
+  }
+  
   var circle2 = newCircle(circle1, 500, 500);
   var circle3 = newCircle(circle1, 500, 0);
   var circle4 = newCircle(circle1, 0, 500);
@@ -99,8 +125,8 @@ var circle1 = document.getElementById('circle1');
   var circle6 = newCircle(circle1, 350, 150);
   var circle7 = newCircle(circle1, 50, 50);
   var circle8 = newCircle(circle1, 0, 100);
-
-
+  var circle9 = newCircle(circle1, 250, 250);
+  
   moveCircle(circle1, 1, 1, fps);
   moveCircle(circle2, -1, -1, fps);
   moveCircle(circle3, -1, 1, fps);
@@ -110,5 +136,7 @@ var circle1 = document.getElementById('circle1');
   orbitCircle(circle6, 80, fps);
   orbitCircle(circle7, 20, fps);
   oscillate(circle8, 0, 500);
+
+  spiningOrbit(circle9, 150, 50, fps);
 }());
 
