@@ -117,7 +117,27 @@ circle1.style.display = "none";
       circle.setAttribute('cy', cy);
     }, fps);
   }
-  
+
+  var oscillatingOrbit = function (circle, radius, oscillation, fps) {
+    var orbitRads = 0;
+    var oscillatingRads = 0;
+    var c = getCircleLocation(circle);
+    var radiusModified;
+    setInterval(function () {
+      orbitRads += .1;
+      oscillatingRads += .8;
+      radiusModified = oscillation * Math.sin(oscillatingRads); 
+      cx = radius * Math.sin(orbitRads);
+      cy = radius * Math.cos(orbitRads);
+      cx += c.x + radiusModified;
+      cy += c.y + radiusModified;
+      circle.setAttribute('cx', cx);
+      circle.setAttribute('cy', cy);
+    }, fps);
+
+  };
+
+  /*  
   var circle2 = newCircle(circle1, 500, 500);
   var circle3 = newCircle(circle1, 500, 0);
   var circle4 = newCircle(circle1, 0, 500);
@@ -126,7 +146,10 @@ circle1.style.display = "none";
   var circle7 = newCircle(circle1, 50, 50);
   var circle8 = newCircle(circle1, 0, 100);
   var circle9 = newCircle(circle1, 250, 250);
-  
+  */
+  var circle10 = newCircle(circle1, 250, 250);
+ 
+  /* 
   moveCircle(circle1, 1, 1, fps);
   moveCircle(circle2, -1, -1, fps);
   moveCircle(circle3, -1, 1, fps);
@@ -138,5 +161,8 @@ circle1.style.display = "none";
   oscillate(circle8, 0, 500);
 
   spiningOrbit(circle9, 150, 50, fps);
+  */
+
+  oscillatingOrbit(circle10, 200, 50, fps);
 }());
 
