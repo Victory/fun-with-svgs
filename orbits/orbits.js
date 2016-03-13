@@ -37,7 +37,6 @@ circle1.style.display = "none";
     }
   }
 
-
   var moveCircle = function (circle, xDirection, yDirection, fps) {
     var val;
     var cx = parseInt(circle.getAttribute('cx'));
