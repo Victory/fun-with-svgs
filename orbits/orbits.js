@@ -24,122 +24,127 @@ prototypeCircle.style.display = "none";
     return circle;
   }
 
-  function* diagonal (cPosition, xDirection, yDirection, stepSize) {
-    cPosition = yield cPosition;
-    var xStep = xDirection * stepSize;
-    var yStep = yDirection * stepSize;
-    while (1) {
-      var next = {
-        x: cPosition.value.x + xStep,
-        y: cPosition.value.y + yStep 
-      };
-      cPosition = yield next;
+  var Motions = (function() {
+    function* diagonal(cPosition, xDirection, yDirection, stepSize) {
+      cPosition = yield cPosition;
+      var xStep = xDirection * stepSize;
+      var yStep = yDirection * stepSize;
+      while (1) {
+        var next = {
+          x: cPosition.value.x + xStep,
+          y: cPosition.value.y + yStep
+        };
+        cPosition = yield next;
+      }
     }
-  }
 
-  var moveCircle = function (circle, xDirection, yDirection, fps) {
-    var val;
-    var cx = parseInt(circle.getAttribute('cx'));
-    var cy = parseInt(circle.getAttribute('cy'));
-    var kissIt = diagonal({x: cx, y: cy}, xDirection, yDirection, 3);
-    var last = kissIt.next(); 
-    var count = 0;
-    var roll = function () {
-      last = kissIt.next(last);
-      val = last.value;
+    var moveCircle = function (circle, xDirection, yDirection, fps) {
+      var val;
+      var cx = parseInt(circle.getAttribute('cx'));
+      var cy = parseInt(circle.getAttribute('cy'));
+      var kissIt = diagonal({x: cx, y: cy}, xDirection, yDirection, 3);
+      var last = kissIt.next();
+      var count = 0;
+      var roll = function () {
+        last = kissIt.next(last);
+        val = last.value;
 
-      cx = val.x;
-      cy = val.y;
-      this.setAttribute('cx', cx.toString());
-      this.setAttribute('cy', cy.toString());
+        cx = val.x;
+        cy = val.y;
+        this.setAttribute('cx', cx.toString());
+        this.setAttribute('cy', cy.toString());
 
-      count += 1;
-      if (count > numSteps) {
-        clearInterval(rollInterval);
-      }
+        count += 1;
+        if (count > numSteps) {
+          clearInterval(rollInterval);
+        }
+      };
+      var rollInterval = setInterval(roll.bind(circle), fps);
     };
-    var rollInterval = setInterval(roll.bind(circle), fps);
-  };
 
-  var orbitCircle = function (circle, radius, fps) {
-    var rads = 0;
-    var cx;
-    var cy;
-    var sun = {
-      x: parseInt(circle.getAttribute('cx')), 
-      y: parseInt(circle.getAttribute('cy'))
+    var orbitCircle = function (circle, radius, fps) {
+      var rads = 0;
+      var cx;
+      var cy;
+      var sun = {
+        x: parseInt(circle.getAttribute('cx')),
+        y: parseInt(circle.getAttribute('cy'))
+      };
+      setInterval(function () {
+        rads += .1;
+        cx = radius * Math.sin(rads);
+        cy = radius * Math.cos(rads);
+        cx += sun.x;
+        cy += sun.y;
+        circle.setAttribute('cx', cx);
+        circle.setAttribute('cy', cy);
+      }, fps);
     };
-    setInterval(function () {
-      rads += .1;
-      cx = radius * Math.sin(rads);
-      cy = radius * Math.cos(rads);
-      cx += sun.x;
-      cy += sun.y;
-      circle.setAttribute('cx', cx);
-      circle.setAttribute('cy', cy);
-    }, fps);
-  };
 
-  var oscillate = function (circle, start, end, fps) {
-    var rads = 0;
-    var step = 10;
-    var cx;
-    var cy;
-    //var initCx = parseInt(circle.getAttribute('cx'));
-    //var initCy = parseInt(circle.getAttribute('cy'));
-    setInterval(function () {
-      rads += .4;
-      cx = parseInt(circle.getAttribute('cx'));
-      cy = parseInt(circle.getAttribute('cy'));
-      cx += step;
-      cy = cy + 30 * Math.sin(rads);
+    var oscillate = function (circle, start, end, fps) {
+      var rads = 0;
+      var step = 10;
+      var cx;
+      var cy;
+      //var initCx = parseInt(circle.getAttribute('cx'));
+      //var initCy = parseInt(circle.getAttribute('cy'));
+      setInterval(function () {
+        rads += .4;
+        cx = parseInt(circle.getAttribute('cx'));
+        cy = parseInt(circle.getAttribute('cy'));
+        cx += step;
+        cy = cy + 30 * Math.sin(rads);
 
-      if (cx + step >= end || cx + step <= start) {
-        step *= -1;
-      }
-      circle.setAttribute('cx', cx);
-      circle.setAttribute('cy', cy);
-    }, fps);
-  };
+        if (cx + step >= end || cx + step <= start) {
+          step *= -1;
+        }
+        circle.setAttribute('cx', cx);
+        circle.setAttribute('cy', cy);
+      }, fps);
+    };
 
-  var spinOrbit = function (circle, radius, oscillation, fps) {
-    var orbitRads = 0;
-    var oscillatingRads = 0;
-    var c = getCircleLocation(circle);
-    var cx;
-    var cy;
-    setInterval(function () {
-      orbitRads += .1;
-      oscillatingRads += .5;
-      cx = radius * Math.sin(orbitRads);
-      cy = radius * Math.cos(orbitRads);
-      cx += c.x + oscillation * Math.sin(oscillatingRads);
-      cy += c.y + oscillation * Math.cos(oscillatingRads);
-      circle.setAttribute('cx', cx);
-      circle.setAttribute('cy', cy);
-    }, fps);
-  };
+    var spinOrbit = function (circle, radius, oscillation, fps) {
+      var orbitRads = 0;
+      var oscillatingRads = 0;
+      var c = getCircleLocation(circle);
+      var cx;
+      var cy;
+      setInterval(function () {
+        orbitRads += .1;
+        oscillatingRads += .5;
+        cx = radius * Math.sin(orbitRads);
+        cy = radius * Math.cos(orbitRads);
+        cx += c.x + oscillation * Math.sin(oscillatingRads);
+        cy += c.y + oscillation * Math.cos(oscillatingRads);
+        circle.setAttribute('cx', cx);
+        circle.setAttribute('cy', cy);
+      }, fps);
+    };
 
-  var oscillatingOrbit = function (circle, radius, oscillation, fps) {
-    var orbitRads = 0;
-    var oscillatingRads = 0;
-    var c = getCircleLocation(circle);
-    var radiusModified;
-    var cx;
-    var cy;
-    setInterval(function () {
-      orbitRads += .1;
-      oscillatingRads += .8;
-      radiusModified = oscillation * Math.sin(oscillatingRads); 
-      cx = radius * Math.sin(orbitRads);
-      cy = radius * Math.cos(orbitRads);
-      cx += c.x + radiusModified;
-      cy += c.y + radiusModified;
-      circle.setAttribute('cx', cx);
-      circle.setAttribute('cy', cy);
-    }, fps);
+    var oscillatingOrbit = function (circle, radius, oscillation, fps) {
+      var orbitRads = 0;
+      var oscillatingRads = 0;
+      var c = getCircleLocation(circle);
+      var radiusModified;
+      var cx;
+      var cy;
+      setInterval(function () {
+        orbitRads += .1;
+        oscillatingRads += .8;
+        radiusModified = oscillation * Math.sin(oscillatingRads);
+        cx = radius * Math.sin(orbitRads);
+        cy = radius * Math.cos(orbitRads);
+        cx += c.x + radiusModified;
+        cy += c.y + radiusModified;
+        circle.setAttribute('cx', cx);
+        circle.setAttribute('cy', cy);
+      }, fps);
+    };
 
-  };
+    return {
+      moveCircle: moveCircle,
+    };
+  }());
 
   /** bind the Add Circle Form */
   (function () {
@@ -152,7 +157,7 @@ prototypeCircle.style.display = "none";
       cx = cxElm.value;
       cy = cyElm.value;
       var circle = newCircle(prototypeCircle, cx, cy);
-      moveCircle(circle, 1, 1, fps);
+      Motions.moveCircle(circle, 1, 1, fps);
     });
   }());
   //
