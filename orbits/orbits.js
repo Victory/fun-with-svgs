@@ -4,9 +4,8 @@ var prototypeCircle = document.getElementById('circle1');
 prototypeCircle.style.display = "none";
 
 (function () {
-  var numSteps = 80;
-  var fps = 1000/25;
 
+  var fps = 1000/25;
   function getCircleLocation (circle) {
     return {
       x: parseInt(circle.getAttribute('cx')),
@@ -25,6 +24,7 @@ prototypeCircle.style.display = "none";
   }
 
   var Motions = (function() {
+    var numSteps = 80;
     function* diagonal(cPosition, xDirection, yDirection, stepSize) {
       cPosition = yield cPosition;
       var xStep = xDirection * stepSize;
