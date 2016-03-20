@@ -86,8 +86,6 @@ prototypeCircle.style.display = "none";
       var step = 10;
       var cx;
       var cy;
-      //var initCx = parseInt(circle.getAttribute('cx'));
-      //var initCy = parseInt(circle.getAttribute('cy'));
       setInterval(function () {
         rads += .4;
         cx = parseInt(circle.getAttribute('cx'));
@@ -122,7 +120,6 @@ prototypeCircle.style.display = "none";
     };
 
     var oscillatingOrbit = function (circle, radius, oscillation, fps) {
-
       var orbitRads = 0;
       var oscillatingRads = 0;
       var c = getCircleLocation(circle);
