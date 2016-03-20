@@ -38,7 +38,7 @@ prototypeCircle.style.display = "none";
       }
     }
 
-    var moveCircle = function (circle, xDirection, yDirection, fps) {
+    var moveDiagonal = function (circle, xDirection, yDirection, fps) {
       var val;
       var cx = parseInt(circle.getAttribute('cx'));
       var cy = parseInt(circle.getAttribute('cy'));
@@ -122,6 +122,7 @@ prototypeCircle.style.display = "none";
     };
 
     var oscillatingOrbit = function (circle, radius, oscillation, fps) {
+
       var orbitRads = 0;
       var oscillatingRads = 0;
       var c = getCircleLocation(circle);
@@ -142,22 +143,42 @@ prototypeCircle.style.display = "none";
     };
 
     return {
-      moveCircle: moveCircle,
+      moveDiagonal: moveDiagonal,
+      oscillatingOrbit: oscillatingOrbit,
+      oscillate: oscillate,
+      spinOrbit: spinOrbit,
+      orbitCircle: orbitCircle
     };
   }());
 
   /** bind the Add Circle Form */
   (function () {
     var form = document.getElementById("addCircle");
+
+    var select = form.querySelector("select[name='direction']");
+
+    // add the motion options
+    for (kk in Motions) {
+      if (!Motions.hasOwnProperty(kk)) {
+        continue;
+      }
+      var option = document.createElement('option');
+      option.setAttribute('name', kk);
+      option.text = kk;
+      select.appendChild(option);
+    }
+
     var button = form.querySelector('button');
     var cxElm = form.querySelector("input[name='cx']");
     var cyElm = form.querySelector("input[name='cy']");
     var cx, cy;
+    var motion;
     button.addEventListener('click', function () {
       cx = cxElm.value;
       cy = cyElm.value;
+      motion = select.value;
       var circle = newCircle(prototypeCircle, cx, cy);
-      Motions.moveCircle(circle, 1, 1, fps);
+      Motions[motion](circle, 1, 1, fps);
     });
   }());
   //
