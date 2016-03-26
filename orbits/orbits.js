@@ -140,7 +140,17 @@ prototypeCircle.style.display = "none";
     };
 
     return {
-      moveDiagonal: moveDiagonal,
+      moveDiagonal: {
+        fun: moveDiagonal,
+        inputs: [
+          {
+            name: cx
+          },
+          {
+            name: cy
+          }
+        ]
+      },
       oscillatingOrbit: oscillatingOrbit,
       oscillate: oscillate,
       spinOrbit: spinOrbit,
