@@ -165,7 +165,7 @@ prototypeCircle.style.display = "none";
     var select = form.querySelector("select[name='direction']");
 
     // add the motion options
-    for (kk in Motions) {
+    for (var kk in Motions) {
       if (!Motions.hasOwnProperty(kk)) {
         continue;
       }
