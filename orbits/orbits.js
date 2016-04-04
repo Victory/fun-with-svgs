@@ -6,6 +6,10 @@ prototypeCircle.style.display = "none";
 (function () {
 
   var fps = 1000/25;
+  var selector = function (attr, val) {
+    return document.querySelector("[" + attr + "='" + val + "']");
+  };
+
   function getCircleLocation (circle) {
     return {
       x: parseInt(circle.getAttribute('cx')),
@@ -188,6 +192,6 @@ prototypeCircle.style.display = "none";
       Motions[motion](circle, 1, 1, fps);
     });
   }());
-  
+
 }());
 
