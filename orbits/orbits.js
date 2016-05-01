@@ -3,6 +3,14 @@ var circle1 = document.getElementById('circle1');
 
 circle1.style.display = "none";
 
+var x = function (circle, x) {
+  circle.setAttribute('cx', x);
+};
+
+var y = function (circle, y) {
+  circle.setAttribute('cy', y);
+};
+
 (function () {
   var numSteps = 80;
   var r = 200;
@@ -12,7 +20,7 @@ circle1.style.display = "none";
     return {
       x: parseInt(circle.getAttribute('cx')),
       y: parseInt(circle.getAttribute('cy'))
-    };
+     };
   }
 
   function newCircle (circleToClone, cx, cy) {
