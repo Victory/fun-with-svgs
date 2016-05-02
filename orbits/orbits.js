@@ -11,6 +11,14 @@ var y = function (circle, y) {
   circle.setAttribute('cy', y);
 };
 
+var gx = function (circle) {
+  return circle.getAttribute('cx');
+};
+
+var gy = function (circle) {
+  return circle.getAttribute('cy');
+};
+
 (function () {
 
   var fps = 1000/25;
@@ -20,8 +28,8 @@ var y = function (circle, y) {
 
   function getCircleLocation (circle) {
     return {
-      x: parseInt(circle.getAttribute('cx')),
-      y: parseInt(circle.getAttribute('cy'))
+      x: gx(circle),
+      y: gy(circle)
      };
   }
 
