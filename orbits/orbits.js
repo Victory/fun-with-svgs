@@ -12,11 +12,11 @@ var y = function (circle, y) {
 };
 
 var gx = function (circle) {
-  return circle.getAttribute('cx');
+  return parseInt(circle.getAttribute('cx'));
 };
 
 var gy = function (circle) {
-  return circle.getAttribute('cy');
+  return parseInt(circle.getAttribute('cy'));
 };
 
 (function () {
