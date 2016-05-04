@@ -3,11 +3,11 @@ var prototypeCircle = document.getElementById('circle1');
 
 prototypeCircle.style.display = "none";
 
-var x = function (circle, x) {
+var sx = function (circle, x) {
   circle.setAttribute('cx', x);
 };
 
-var y = function (circle, y) {
+var sy = function (circle, y) {
   circle.setAttribute('cy', y);
 };
 
@@ -36,8 +36,8 @@ var gy = function (circle) {
   function newCircle (circleToClone, cx, cy) {
     var circle = circleToClone.cloneNode(false);
     circle.setAttribute('id', '');
-    circle.setAttribute('cx', cx);
-    circle.setAttribute('cy', cy);
+    sx(circle, cx);
+    sy(circle, cy);
     circle.style.display = "block";
     orbits.appendChild(circle);
     return circle;
